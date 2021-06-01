@@ -17,7 +17,7 @@ export default function Line(props) {
   //setCoord(props.coord ? props.coord : [0, 0, 100, 100]);
   return (
     <line
-      {...props}
+      {...props.events}
       x1={coord[0]}
       y1={coord[1]}
       x2={coord[2]}
