@@ -2,24 +2,63 @@ import React, { useState } from 'react';
 import './style.css';
 
 export default function Dragzone(props) {
-  let [coord, setCoord] = useState([0, 0, 100, 100]);
   let events = {
     onMouseEnter: () => console.log('mouse enter'),
-    onMouseLeave: () => console.log('mouse leave'),
-    onMouseMove: () => console.log('mouse move'),
-    onMouseUp: () => console.log('mouse released'),
+    onMouseLeave: evt => {
+      call(evt, callbacks.onMouseLeave);
+        console.log('sub mouse enter');
+      console.log(evt);
+    },
+    onMouseMove: evt => {
+      call(evt, callbacks.onMouseMove);
+        console.log('sub mouse move');
+      console.log(evt);
+    },
+    onMouseUp: evt => {
+      call(evt, callbacks.onMouseUp);
+        console.log('sub mouse up');
+      console.log(evt);
+    },
     onMouseDown: () => console.log('mouse pressed'),
     onDrag: () => console.log('mouse dragged'),
-    draggable:"true"
+    draggable: 'true'
+  };
+  let subscribe = (name, callback) => {
+    let id = '#' + Math.round(Math.random() * 10000);
+    callbacks[name][id] = callback;
+  };
+  let callbacks = {
+    onMouseEnter: {},
+    onMouseLeave: {},
+    onMouseMove: {},
+    onMouseUp: {},
+    onMouseDown: {}
+  };
+
+  let call = (evt, obj) => {
+    for (let i in obj) {
+      obj[i](evt);
+    }
   };
 
   let children = props.children;
-  return (
-    <>
+  let Comp = props.component;
+  let r = (
+    <Comp {...events}>
       {React.Children.map(children, child => {
-        child = React.cloneElement(child, {events:events});
-        return child; //;
+        child = React.cloneElement(child, { subscribe: subscribe });
+        return child;
       })}
-    </>
+    </Comp>
   );
+
+  return r;
+  // return (
+  //   <>
+  //     {React.Children.map(children, child => {
+  //       child = React.cloneElement(child, {dragZone:this,  events: events,});
+  //       return child; //;
+  //     })}
+  //   </>
+  // );
 }

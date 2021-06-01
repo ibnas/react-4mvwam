@@ -5,7 +5,7 @@ export default function Draggable(props) {
   let [coord, setCoord] = useState({ x: 0, y: 0 });
   let [mousedown, setMousedown] = useState(false);
   let [dragging, setDragging] = useState(false);
-  let dragState = {};
+  let [dragState, setDragstate] = useState({});
 
   let move = evt => {
     if (dragging) {
@@ -13,28 +13,32 @@ export default function Draggable(props) {
       dragState.dy = evt.pageY - dragState.y;
       dragState.x = evt.pageX;
       dragState.y = evt.pageY;
+      setDragging(dragState);
       onDrag(dragState);
     }
   };
-
+  let subscribed = false;
+  let mL = () => {};
   let events = {
-    onMouseEnter: () => console.log('mouse enter'),
+    onMouseEnter: () => {
+      if (subscribed) {
+        setMousedown(true);
+        setDragging(true);
+      }
+    },
     onMouseLeave: evt => {
       if (dragging) {
-        dragState.dx = evt.pageX - dragState.x;
-        dragState.dy = evt.pageY - dragState.y;
-        dragState.x = evt.pageX;
-        dragState.y = evt.pageY;
-
-        props.dragZone.addMouseListener('mousemove', move);
-        props.dragZone.addMouseListener('mouseleave', () => {
-          setDragging(false);
-        });
-        props.dragZone.addMouseListener('mouseup', () => {
-          setDragging(false);
-        });
-
-        onDrag(dragState);
+        if (props.subscribe) {
+          props.subscribe('onMouseMove', move);
+          props.subscribe('onMouseLeave', () => {
+            setMousedown(false);
+            setDragging(false);
+          });
+          props.subscribe('onMouseUp', () => {
+            setMousedown(false);
+            setDragging(false);
+          });
+        }
       }
       console.log('mouse leave');
       console.log(evt);
@@ -42,33 +46,27 @@ export default function Draggable(props) {
     },
     onMouseMove: evt => {
       if (dragging) {
-        dragState.dx = evt.movementX;
-        dragState.dy = evt.movementY;
-        dragState.x = evt.pageX;
-        dragState.y = evt.pageY;
-
-        onDrag(dragState);
+        move(evt);
       } else if (mousedown) {
         setDragging(true);
-        dragState.dx = evt.movementX;
-        dragState.dy = evt.movementY;
-        dragState.x = evt.pageX;
-        dragState.y = evt.pageY;
-        onDrag(dragState);
+        move(evt);
       }
       console.log(evt);
+      console.log(dragState);
     },
     onMouseUp: () => {
       setMousedown(false);
       setDragging(false);
 
-      if (dragging) {
-      }
       console.log('mouse released');
+      console.log(dragState);
     },
-    onMouseDown: () => {
+    onMouseDown: evt => {
       setMousedown(true);
+      dragState.x = evt.pageX;
+      dragState.y = evt.pageY;
       console.log('mouse pressed');
+      console.log(dragState);
     }
   };
   let onDrag = () => {}; //callBack => callBack(dragState)
