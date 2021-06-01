@@ -14,7 +14,15 @@ export default function Line(props) {
   //   this.setCoord(co);
   // };
   let Ln = 'line';
-  //setCoord(props.coord ? props.coord : [0, 0, 100, 100]);
+  //
+  props.onDrag(dragState => {
+    setCoord([
+      coord[0] + dragState.dx,
+      coord[1] + dragState.dy,
+      coord[2] + dragState.dx,
+      coord[3] + dragState.dy
+    ]);
+  });
   return (
     <line
       {...props.events}
@@ -22,7 +30,7 @@ export default function Line(props) {
       y1={coord[1]}
       x2={coord[2]}
       y2={coord[3]}
-      style={{ stroke: 'rgb(255,0,0)', 'stroke-width': '6', cursor: 'grab' }}
+      style={{ stroke: 'rgb(255,0,0)', 'stroke-width': '24', cursor: 'grab' }}
     />
   );
 }
