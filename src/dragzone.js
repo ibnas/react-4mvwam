@@ -24,6 +24,8 @@ export default function Dragzone(props) {
     draggable: 'true'
   };
   let subscribe = (name, callback) => {
+          console.log("subs");
+
     let id = '#' + Math.round(Math.random() * 10000);
     callbacks[name][id] = callback;
   };

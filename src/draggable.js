@@ -28,6 +28,7 @@ export default function Draggable(props) {
     },
     onMouseLeave: evt => {
       if (dragging) {
+
         if (props.subscribe) {
           props.subscribe('onMouseMove', move);
           props.subscribe('onMouseLeave', () => {
