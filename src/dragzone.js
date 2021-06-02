@@ -6,29 +6,32 @@ export default function Dragzone(props) {
     onMouseEnter: () => console.log('mouse enter'),
     onMouseLeave: evt => {
       call(evt, callbacks.onMouseLeave);
-        console.log('sub mouse enter');
-      console.log(evt);
+      console.log('sub mouse enter');
+      // console.log(evt);
     },
     onMouseMove: evt => {
       call(evt, callbacks.onMouseMove);
-        console.log('sub mouse move');
-      console.log(evt);
+      console.log('sub mouse move');
+      // console.log(evt);
     },
     onMouseUp: evt => {
       call(evt, callbacks.onMouseUp);
-        console.log('sub mouse up');
-      console.log(evt);
+      console.log('sub mouse up');
+      // console.log(evt);
     },
     onMouseDown: () => console.log('mouse pressed'),
-    onDrag: () => console.log('mouse dragged'),
-    draggable: 'true'
   };
   let subscribe = (name, callback) => {
-          console.log("subs");
+    console.log("subs");
 
     let id = '#' + Math.round(Math.random() * 10000);
     callbacks[name][id] = callback;
+    return id;
   };
+
+  let unSubscribe = (name, id) => {
+    delete callbacks[name][id];
+  }
   let callbacks = {
     onMouseEnter: {},
     onMouseLeave: {},
@@ -48,7 +51,7 @@ export default function Dragzone(props) {
   let r = (
     <Comp {...events}>
       {React.Children.map(children, child => {
-        child = React.cloneElement(child, { subscribe: subscribe });
+        child = React.cloneElement(child, { subscribe: { subscribe: subscribe, unSubscribe: unSubscribe } });
         return child;
       })}
     </Comp>

@@ -1,49 +1,67 @@
 import React, { useState } from 'react';
+import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 import './style.css';
 
 export default function Draggable(props) {
-  let [coord, setCoord] = useState({ x: 0, y: 0 });
   let [mousedown, setMousedown] = useState(false);
   let [dragging, setDragging] = useState(false);
   let [dragState, setDragstate] = useState({});
+  let [subscrib, setSubscribe] = useState([]);
 
   let move = evt => {
     if (dragging) {
-      dragState.dx = evt.pageX - dragState.x;
-      dragState.dy = evt.pageY - dragState.y;
-      dragState.x = evt.pageX;
-      dragState.y = evt.pageY;
-      setDragging(dragState);
-      onDrag(dragState);
+      let ds = { ...dragState }
+      ds.dx = evt.pageX - dragState.x;
+      ds.dy = evt.pageY - dragState.y;
+      ds.x = evt.pageX;
+      ds.y = evt.pageY;
+      onDrag(ds);
+      setDragstate(ds);
+      console.log(ds);
+
     }
   };
   let subscribed = false;
-  let mL = () => {};
   let events = {
     onMouseEnter: () => {
-      if (subscribed) {
-        setMousedown(true);
-        setDragging(true);
-      }
+      // if (subscribed) {
+      //   setMousedown(true);
+      //   setDragging(true);
+      // }
+      console.log('mouse enter');
+
     },
     onMouseLeave: evt => {
       if (dragging) {
 
         if (props.subscribe) {
-          props.subscribe('onMouseMove', move);
-          props.subscribe('onMouseLeave', () => {
+          let subscribe = props.subscribe.subscribe;
+          let unSubscribe = props.subscribe.unSubscribe;
+          let moveId = (subscrib[0]) ? subscrib[0] : subscribe('onMouseMove', move);
+          let leaveId = (subscrib[1]) ? subscrib[1] : subscribe('onMouseLeave', () => {
             setMousedown(false);
-            setDragging(false);
+            stopDrag();
           });
-          props.subscribe('onMouseUp', () => {
+          let upId = (subscrib[2]) ? subscrib[2] : subscribe('onMouseUp', () => {
             setMousedown(false);
-            setDragging(false);
+            stopDrag();
           });
+
+          let stopDrag = () => {
+            setDragging(false);
+            unSubscribe('onMouseMove', moveId);
+            unSubscribe('onMouseLeave', leaveId);
+            unSubscribe('onMouseUp', upId);
+            setSubscribe([]);
+
+          }
+
+          setSubscribe([moveId, leaveId, upId]);
         }
       }
       console.log('mouse leave');
-      console.log(evt);
-      console.log(dragState);
+      // console.log(evt);
+      // console.log(dragState);
     },
     onMouseMove: evt => {
       if (dragging) {
@@ -52,25 +70,28 @@ export default function Draggable(props) {
         setDragging(true);
         move(evt);
       }
-      console.log(evt);
-      console.log(dragState);
+      evt.preventDefault();
+      // console.log(evt);
+      // console.log(dragState);
+      console.log('mouse move');
+
     },
     onMouseUp: () => {
       setMousedown(false);
       setDragging(false);
 
       console.log('mouse released');
-      console.log(dragState);
+      // console.log(dragState);
     },
     onMouseDown: evt => {
       setMousedown(true);
       dragState.x = evt.pageX;
       dragState.y = evt.pageY;
       console.log('mouse pressed');
-      console.log(dragState);
+      // console.log(dragState);
     }
   };
-  let onDrag = () => {}; //callBack => callBack(dragState)
+  let onDrag = () => { }; //callBack => callBack(dragState)
   let children = props.children;
   return (
     <>

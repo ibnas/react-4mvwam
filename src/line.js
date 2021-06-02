@@ -30,7 +30,7 @@ export default function Line(props) {
       y1={coord[1]}
       x2={coord[2]}
       y2={coord[3]}
-      style={{ stroke: 'rgb(255,0,0)', 'stroke-width': '24', cursor: 'grab' }}
+      style={{ stroke: 'rgb(255,0,0)', 'stroke-width': '1', cursor: 'grab' }}
     />
   );
 }
