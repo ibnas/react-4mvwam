@@ -27,7 +27,7 @@ let DraggableChild = (props) => {
       ds.dy = evt.pageY - dragState.y;
       ds.x = evt.pageX;
       ds.y = evt.pageY;
-      dragstate.dragObject = this;
+      dragState.dragObject = this;
 
       onDrag(ds);
       setDragstate(ds);
@@ -87,7 +87,7 @@ let DraggableChild = (props) => {
       if (dragging) {
         move(evt);
       } else if (mousedown) {
-        props.context.setDragstate(dragState);
+        props.context.setDragState(dragState);
         setDragging(true);
         move(evt);
       }
@@ -103,7 +103,7 @@ let DraggableChild = (props) => {
       }
       setMousedown(false);
       setDragging(false);
-      props.context.setDragstate(null);
+      props.context.setDragState(null);
       // console.log('mouse released');
       // console.log(dragState);
     },
