@@ -48,10 +48,11 @@ export default function Dragzone(props) {
 
   let children = props.children;
   let Comp = props.component;
+  let dragState = false;
   let r = (
     <Comp {...events}>
       {React.Children.map(children, child => {
-        child = React.cloneElement(child, { subscribe: { subscribe: subscribe, unSubscribe: unSubscribe } });
+        child = React.cloneElement(child, { context: { subscribe: subscribe, unSubscribe: unSubscribe, setDragState: (ds) => { dragState = ds }, getDragState: () => dragState } });
         return child;
       })}
     </Comp>
