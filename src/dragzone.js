@@ -19,7 +19,7 @@ export default function Dragzone(props) {
       // console.log('sub mouse up');
       // console.log(evt);
     },
-    onMouseDown: () => {}
+    onMouseDown: () => {},
   };
   let subscribe = (name, callback) => {
     // console.log("subs");
@@ -31,7 +31,7 @@ export default function Dragzone(props) {
 
   let unSubscribe = (name, id) => {
     delete callbacks[name][id];
-  };
+  }
   let callbacks = {
     onMouseEnter: {},
     onMouseLeave: {},
@@ -52,16 +52,7 @@ export default function Dragzone(props) {
   let r = (
     <Comp {...events}>
       {React.Children.map(children, child => {
-        child = React.cloneElement(child, {
-          context: {
-            subscribe: subscribe,
-            unSubscribe: unSubscribe,
-            setDragState: ds => {
-              dragState = ds;
-            },
-            getDragState: () => dragState
-          }
-        });
+        child = React.cloneElement(child, { context: { subscribe: subscribe, unSubscribe: unSubscribe, setDragState: (ds) => { dragState = ds }, getDragState: () => dragState } });
         return child;
       })}
     </Comp>
