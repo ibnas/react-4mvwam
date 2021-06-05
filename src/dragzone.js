@@ -3,7 +3,7 @@ import './style.css';
 
 export default function Dragzone(props) {
   let events = {
-    onMouseEnter: () => {},
+    onMouseEnter: () => { },
     onMouseLeave: evt => {
       call(evt, callbacks.onMouseLeave);
       // console.log('sub mouse leave');
@@ -19,7 +19,7 @@ export default function Dragzone(props) {
       // console.log('sub mouse up');
       // console.log(evt);
     },
-    onMouseDown: () => {},
+    onMouseDown: () => { },
   };
   let subscribe = (name, callback) => {
     // console.log("subs");
@@ -48,17 +48,27 @@ export default function Dragzone(props) {
 
   let children = props.children;
   let Comp = props.component;
-  let dragState = false;
+  let [dragState, setDragState] = useState(false);
+  let setDs = (ds) => {
+    if (ds === null) return;
+    const newLocal = '#' + Math.round(Math.random() * 10000);
+    ds.id = newLocal;
+    setDragState(ds);
+    return newLocal;
+  };
   let r = (
     <Comp {...events}>
       {React.Children.map(children, child => {
-        child = React.cloneElement(child, { context: { subscribe: subscribe, unSubscribe: unSubscribe, setDragState: (ds) => { dragState = ds }, getDragState: () => dragState } });
+        child = React.cloneElement(child, { context: { subscribe: subscribe, unSubscribe: unSubscribe, setDragState: setDs, getDragState: () => { return dragState } } });
         return child;
       })}
     </Comp>
   );
 
   return r;
+
+
+
   // return (
   //   <>
   //     {React.Children.map(children, child => {

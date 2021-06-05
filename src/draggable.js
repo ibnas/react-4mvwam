@@ -35,20 +35,20 @@ let DraggableChild = props => {
       ds.dy = evt.pageY - dragState.y;
       ds.x = evt.pageX;
       ds.y = evt.pageY;
-      dragState.dragObject = this;
+      dragState.dragObject = id;
 
       onDrag(ds);
       setDragstate(ds);
       // console.log(ds);
     }
   };
-  let subscribed = false;
+  let id = false;
   let events = {
     onMouseEnter: () => {
       if (list.enter) {
         if (dragging) list.enter(dragState);
         else list.enter(props.context.getDragState());
-        console.log(props.context.getDragState());
+        //console.log(props.context.getDragState());
       }
     }, //gggrgrgrgr
     onMouseLeave: evt => {
@@ -66,20 +66,20 @@ let DraggableChild = props => {
           let leaveId = subscrib[1]
             ? subscrib[1]
             : subscribe('onMouseLeave', () => {
-                setMousedown(false);
-                stopDrag();
-              });
+              setMousedown(false);
+              stopDrag();
+            });
           let upId = subscrib[2]
             ? subscrib[2]
             : subscribe('onMouseUp', () => {
-                setMousedown(false);
-                stopDrag();
-              });
+              setMousedown(false);
+              stopDrag();
+            });
 
           let stopDrag = () => {
             setDragging(false);
             props.context.setDragState(null);
-
+            id = false;
             unSubscribe('onMouseMove', moveId);
             unSubscribe('onMouseLeave', leaveId);
             unSubscribe('onMouseUp', upId);
@@ -100,8 +100,8 @@ let DraggableChild = props => {
       if (dragging) {
         move(evt);
       } else if (mousedown) {
-        props.context.setDragState(dragState);
         setDragging(true);
+        id = props.context.setDragState({ ds: dragState });
         move(evt);
       }
       // console.log(evt);
@@ -131,9 +131,9 @@ let DraggableChild = props => {
       // console.log(dragState);
     }
   };
-  let onDrag = props.onDrag ? props.onDrag : () => {};
+  let onDrag = props.onDrag ? props.onDrag : () => { };
 
-  let update = dragstate => {};
+  let update = dragstate => { };
   let list = {};
   if (props.listeners) {
     list = props.listeners;

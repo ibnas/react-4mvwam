@@ -5,16 +5,16 @@ import Draggable from './draggable';
 let DraggableRect = props => {
   let [coor, setCoord] = props.updateFromUp
     ? [
-        props.coord,
-        coord => {
-          coor = coord;
-        }
-      ]
+      props.coord,
+      coord => {
+        coor = coord;
+      }
+    ]
     : useState({ x: 100, width: 100, y: 100, height: 200 });
 
   let fireMyPositionChanged = props.positionChange
     ? props.positionChange
-    : () => {};
+    : () => { };
   let onDrg = dragState => {
     let newCoor = {
       x: coor.x + dragState.dx,
@@ -34,7 +34,8 @@ let DraggableRect = props => {
       positionChange={fireMyPositionChanged}
       listeners={{
         enter: obj => {
-          console.log(obj + '  entered');
+          console.log(obj);
+          console.log('  entered');
         }
       }}
     >
