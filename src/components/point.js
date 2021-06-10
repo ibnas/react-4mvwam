@@ -15,9 +15,9 @@ function Text(props) {
     setTediting(!editing);
   };
   let r = !editing ? (
-    <text x={coor[0]} y={coor[1]} onDoubleClick={onClick}>
+    <point x={coor[0]} y={coor[1]} onDoubleClick={onClick}>
       {text}
-    </text>
+    </point>
   ) : (
     <foreignObject
       x={coor[0]}

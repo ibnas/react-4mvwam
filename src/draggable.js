@@ -4,16 +4,20 @@ import './style.css';
 
 export default function Draggable(props) {
   let children = props.children;
+
+  let update = dragstate => {
+    props.onDrag ? props.onDrag(dragstate) : false;
+  };
+  props.updateState ? props.updateState(update) : false;
   return (
     <>
       {React.Children.map(children, child => {
         return (
           <DraggableChild
-            allProps={props}
             context={props.context}
             onDrag={props.onDrag}
             child={child}
-            change={props.change}
+            positionChange={props.positionChange}
             listeners={props.listeners}
           />
         ); //;
@@ -66,15 +70,15 @@ let DraggableChild = props => {
           let leaveId = subscrib[1]
             ? subscrib[1]
             : subscribe('onMouseLeave', () => {
-              setMousedown(false);
-              stopDrag();
-            });
+                setMousedown(false);
+                stopDrag();
+              });
           let upId = subscrib[2]
             ? subscrib[2]
             : subscribe('onMouseUp', () => {
-              setMousedown(false);
-              stopDrag();
-            });
+                setMousedown(false);
+                stopDrag();
+              });
 
           let stopDrag = () => {
             setDragging(false);
@@ -131,9 +135,8 @@ let DraggableChild = props => {
       // console.log(dragState);
     }
   };
-  let onDrag = props.onDrag ? props.onDrag : () => { };
+  let onDrag = props.onDrag ? props.onDrag : () => {};
 
-  let update = dragstate => { };
   let list = {};
   if (props.listeners) {
     list = props.listeners;
@@ -141,8 +144,8 @@ let DraggableChild = props => {
 
   let c = React.cloneElement(props.child, {
     ...events,
-    updateState: update,
-    onDrag: cb => (onDrag = cb)
+    positionChange: props.positionChange,
+    setOnDrag: cb => (onDrag = cb)
   });
   return c;
 };
