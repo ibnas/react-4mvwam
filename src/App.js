@@ -18,7 +18,7 @@ export default function App() {
         <DraggableCircle x={100} y={200} r={30} />
         <DraggableRect
           coord={{ x: 100, width: 100, y: 100, height: 200 }}
-        />{' 
+        />
         <Text />
       </Dragzone>
     </div>
