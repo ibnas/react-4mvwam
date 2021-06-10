@@ -9,9 +9,17 @@ let Group = function(props) {
       update(dragState);
     });
   };
+  let updateState = func => {
+    updates.push(func);
+    setUpdates(updates);
+  };
 
   return React.Children.map(ch, child => {
-    child = React.cloneElement(child, { context: props.context });
+    child = React.cloneElement(child, {
+      context: props.context,
+      positionChange: updateChildren,
+      updateState: updateState
+    });
     return child;
   });
 
