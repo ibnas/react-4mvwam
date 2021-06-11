@@ -60,7 +60,7 @@ import Draggable from './draggable';
 // };
 
 
-class DraggableRect extends Draggable {
+class DraggableRect1 extends Draggable {
 
   constructor(props) {
     super(props);
@@ -83,15 +83,59 @@ class DraggableRect extends Draggable {
     console.log(newCoor);
   }
 
+  // render() {
+  //   let strokeWidth = 3;
+  //   let ss = super.render();
+  //   return <rect
+  //     {...this.state.coor}
+  //     fill={'rgba(0,125,125,1)'}
+  //     style={{
+  //       stroke: 'rgba(0,255,0,0.5)',
+  //       'stroke-width': strokeWidth + 5,
+  //       cursor: 'grab'
+  //     }} />
+  // }
+}
+
+class DraggableRect extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      coor: { x: 100, width: 100, y: 100, height: 20 }
+    }
+  }
+
   render() {
-    return <rect
-      {...this.state.coor}
-      fill={'rgba(0,125,125,1)'}
-      style={{
-        stroke: 'rgba(0,255,0,0.5)',
-        'stroke-width': strokeWidth + 5,
-        cursor: 'grab'
-      }} />
+    let strokeWidth = 3;
+    let onDrag = (dragState) => {
+      let coor = this.state.coor;
+      let newCoor = {
+        x: coor.x + dragState.dx,
+        y: coor.y + dragState.dy,
+        width: 100,
+        height: 200
+      };
+
+      this.setState({ coor: newCoor });
+      console.log(this.state.coor);//fireMyPositionChanged(dragState);
+      console.log(newCoor);
+    }
+    let props = this.props;
+    return <Draggable onDrag={onDrag}
+      context={props.context}
+      positionChange={props.positionChange}
+      listeners={props.listeners}
+      updateState={props.updateState}>
+      <rect
+        {...this.state.coor}
+
+        fill={'rgba(0,125,125,1)'}
+        style={{
+          stroke: 'rgba(0,255,0,0.5)',
+          'stroke-width': strokeWidth + 5,
+          cursor: 'grab'
+        }} />
+    </Draggable>
   }
 }
 

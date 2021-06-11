@@ -2,6 +2,17 @@ import React, { useState } from 'react';
 import './style.css';
 
 export default function Dragzone(props) {
+  let [dragState, setDragState] = useState(false);
+  let [callbacks, setCallbacks] = useState({
+    onMouseEnter: {},
+    onMouseLeave: {},
+    onMouseMove: {},
+    onMouseUp: {},
+    onMouseDown: {}
+  }
+  );
+  let Cbs = { ...callbacks };
+
   let events = {
     onMouseEnter: () => { },
     onMouseLeave: evt => {
@@ -25,20 +36,16 @@ export default function Dragzone(props) {
     // console.log("subs");
 
     //let id = '#' + Math.round(Math.random() * 10000);
-    callbacks[name][id] = callback;
+
+    Cbs[name][id] = callback;
+    setCallbacks(Cbs);
     return id;
   };
 
   let unSubscribe = (name, id) => {
     delete callbacks[name][id];
   }
-  let callbacks = {
-    onMouseEnter: {},
-    onMouseLeave: {},
-    onMouseMove: {},
-    onMouseUp: {},
-    onMouseDown: {}
-  };
+
 
   let call = (evt, obj) => {
     for (let i in obj) {
@@ -48,7 +55,8 @@ export default function Dragzone(props) {
 
   let children = props.children;
   let Comp = props.component;
-  let [dragState, setDragState] = useState(false);
+
+
   let setDs = (ds) => {
     if (ds === null) return;
     const newLocal = '#' + Math.round(Math.random() * 10000);

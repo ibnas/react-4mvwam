@@ -2,28 +2,54 @@ import React, { useState } from 'react';
 import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 import './style.css';
 
-export default function Draggable(props) {
-  let children = props.children;
+// export default function Draggable(props) {
+//   let children = props.children;
 
 
-  return (
-    <>
-      {React.Children.map(children, child => {
-        return (
-          <DraggableChild
-            context={props.context}
-            onDrag={props.onDrag}
-            child={child}
-            positionChange={props.positionChange}
-            listeners={props.listeners}
-            updateState={props.updateState}
-          />
-        ); //;
-      })}
-    </>
-  );
+//   return (
+//     <>
+//       {React.Children.map(children, child => {
+//         return (
+//           <DraggableChild
+//             context={props.context}
+//             onDrag={props.onDrag}
+//             child={child}
+//             positionChange={props.positionChange}
+//             listeners={props.listeners}
+//             updateState={props.updateState}
+//           />
+//         ); //;
+//       })}
+//     </>
+//   );
+// }
+
+class Draggable extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    let children = this.props.children;
+    let props = this.props;
+    return (
+      <>
+        {React.Children.map(children, child => {
+          return (
+            <DraggableChild
+              context={props.context}
+              onDrag={props.onDrag}
+              child={child}
+              positionChange={props.positionChange}
+              listeners={props.listeners}
+              updateState={props.updateState}
+            />
+          ); //;
+        })}
+      </>
+    );
+  }
 }
-
 
 
 class DraggableChild extends React.Component {
@@ -93,7 +119,7 @@ class DraggableChild extends React.Component {
             let stopDrag = () => {
               this.setState({ dragging: false });
               props.context.setDragState(null);
-              id = false;
+              let id = this.state.id;
               unSubscribe('onMouseMove', moveId, id);
               unSubscribe('onMouseLeave', leaveId, id);
               unSubscribe('onMouseUp', upId, id);
@@ -154,10 +180,10 @@ class DraggableChild extends React.Component {
       ds.x = evt.pageX;
       ds.y = evt.pageY;
       ds.dragObject = this.state.id;
-      console.log("this.state.dragState");
-      console.log(this.state.dragState);
-      console.log("ds");
-      console.log(ds);
+      // console.log("this.state.dragState");
+      // console.log(this.state.dragState);
+      // console.log("ds");
+      // console.log(ds);
 
 
       this.onDrag(ds);
@@ -179,6 +205,8 @@ class DraggableChild extends React.Component {
   }
 
 }
+
+export default Draggable;
 
 
 
