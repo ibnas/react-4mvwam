@@ -123,8 +123,8 @@ class DraggableChild extends React.Component {
           if (this.state.dragging) list.up(this.state.dragState);
           else list.enter(props.context.getDragState());
         }
-        this.setState({ mousedown: [] });
-        this.setState({ dragging: [] });
+        this.setState({ mousedown: false });
+        this.setState({ dragging: false });
         props.context.setDragState(null);
 
       },
@@ -133,7 +133,7 @@ class DraggableChild extends React.Component {
           if (this.state.dragging) list.down(this.state.dragState);
           else list.enter(props.context.getDragState());
         }
-        this.setState({ mousedown: [] });
+        this.setState({ mousedown: true });
         let dragState = this.state.dragState;
         dragState.x = evt.pageX;
         dragState.y = evt.pageY;
@@ -148,12 +148,17 @@ class DraggableChild extends React.Component {
 
   move = evt => {
     if (this.state.dragging) {
-      let ds = { ...this.state.dragState };
+      let ds = {};
       ds.dx = evt.pageX - this.state.dragState.x;
       ds.dy = evt.pageY - this.state.dragState.y;
       ds.x = evt.pageX;
       ds.y = evt.pageY;
       ds.dragObject = this.state.id;
+      console.log("this.state.dragState");
+      console.log(this.state.dragState);
+      console.log("ds");
+      console.log(ds);
+
 
       this.onDrag(ds);
       this.setState({ dragState: ds });
