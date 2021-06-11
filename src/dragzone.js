@@ -21,10 +21,10 @@ export default function Dragzone(props) {
     },
     onMouseDown: () => { },
   };
-  let subscribe = (name, callback) => {
+  let subscribe = (name, callback, id) => {
     // console.log("subs");
 
-    let id = '#' + Math.round(Math.random() * 10000);
+    //let id = '#' + Math.round(Math.random() * 10000);
     callbacks[name][id] = callback;
     return id;
   };

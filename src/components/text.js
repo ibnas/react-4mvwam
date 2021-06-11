@@ -6,10 +6,16 @@ function Text(props) {
   let [text, setText] = useState('Text');
   let [coor, setCoord] = useState([20, 35]);
 
+  if (props.dragState) {
+    onDrg(dragState);
+  }
+
   let onDrg = dragState => {
     setCoord([coor[0] + dragState.dx, coor[1] + dragState.dy]);
-    //positionChange(dragState);
+    // props.positionChange(dragState);
   };
+
+  //props.updateState(onDrg);
 
   let onClick = () => {
     setTediting(!editing);
@@ -30,7 +36,7 @@ function Text(props) {
     </foreignObject>
   );
   return (
-    <Draggable context={props.context} onDrag={onDrg}>
+    <Draggable context={props.context} onDrag={onDrg} updateState={props.updateState} positionChange={props.positionChange} >
       {r}
     </Draggable>
   );

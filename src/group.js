@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 
-let Group = function(props) {
+let Group = function (props) {
   let ch = props.children;
-  let [updates, setUpdates] = useState([]);
+  // let [dragState, setdragState] = useState([]);
+  let [updateKey, setUpdateKey] = useState({});
+  // let [key, setKey] = useState([]);
 
-  let updateChildren = dragState => {
-    updates.map(update => {
-      update(dragState);
-    });
+  let updateChildren = (dragState, key) => {
+    // setdragState(dragState);
+    // setKey(key);
+    for (let i in updateKey) {
+      if (key === i) continue;
+      updateKey[i](dragState);
+    }
   };
-  let updateState = func => {
-    updates.push(func);
-    setUpdates(updates);
+  let getUpdateStateWithKey = (func, key) => {
+    updateKey[key] = func;
+    setUpdateKey(updateKey);
   };
 
   return React.Children.map(ch, child => {
     child = React.cloneElement(child, {
       context: props.context,
       positionChange: updateChildren,
-      updateState: updateState
+      updateState: getUpdateStateWithKey
     });
     return child;
   });

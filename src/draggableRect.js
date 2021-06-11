@@ -22,16 +22,20 @@ let DraggableRect = props => {
       width: 100,
       height: 200
     };
-    console.log(newCoor);
+    //console.log(newCoor);
     setCoord(newCoor);
-    fireMyPositionChanged(dragState);
+    //fireMyPositionChanged(dragState);
   };
+
+  //props.updateState(onDrg,id);
+
   let strokeWidth = 3;
   return (
     <Draggable
       context={props.context}
       onDrag={onDrg}
       positionChange={fireMyPositionChanged}
+      updateState={props.updateState}
       listeners={{
         enter: obj => {
           console.log(obj);
